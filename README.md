@@ -4,7 +4,9 @@ Personal graphics portfolio vault for **Pratibha Agrawal** — logos, YouTube th
 
 ## Live demo
 
-> After deploy, paste your public URL here.
+**Public app:** https://pratibha-graphics-studio.vercel.app  
+
+**GitHub:** https://github.com/agrawalpratibha63/pratibha-graphics-studio
 
 ## Features
 

@@ -1,0 +1,3 @@
+-- After first owner signup (or to reassign), run:
+-- update public.profiles set role = 'owner' where email = 'YOUR_EMAIL@example.com';
+-- update public.profiles set role = 'visitor' where email <> 'YOUR_EMAIL@example.com' and role = 'owner';

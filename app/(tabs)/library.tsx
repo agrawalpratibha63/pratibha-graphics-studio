@@ -11,6 +11,7 @@ import {
 import { useFocusEffect, useRouter } from 'expo-router';
 import { WorkCard } from '@/components/WorkCard';
 import { WorkLightbox } from '@/components/WorkLightbox';
+import { StageReveal } from '@/components/StageReveal';
 import { Chip, LoadingBlock, Muted, Subtitle } from '@/components/ui';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
@@ -49,6 +50,7 @@ export default function LibraryScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<Work | null>(null);
+  const [focusTick, setFocusTick] = useState(0);
 
   const pad = spacing.md;
   const gap = 8;
@@ -72,6 +74,7 @@ export default function LibraryScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      setFocusTick((t) => t + 1);
       setLoading(true);
       load().finally(() => setLoading(false));
     }, [load])
@@ -101,6 +104,7 @@ export default function LibraryScreen() {
   if (loading) return <LoadingBlock />;
 
   return (
+    <StageReveal triggerKey={`library-${focusTick}`}>
     <View style={styles.screen}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
@@ -200,6 +204,7 @@ export default function LibraryScreen() {
         }}
       />
     </View>
+    </StageReveal>
   );
 }
 

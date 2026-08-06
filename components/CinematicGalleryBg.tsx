@@ -164,13 +164,12 @@ export function CinematicGalleryBg() {
   const [hoverKey, setHoverKey] = React.useState<string | null>(null);
 
   const frames: FrameSpec[] = useMemo(() => {
+    // Keep floating frames on the RIGHT so they don't cover login hero copy
     const layout = [
-      { x: 4, y: 10, size: 150, rotate: -8, delay: 0, duration: 5200, drift: 18 },
-      { x: 22, y: 42, size: 120, rotate: 6, delay: 400, duration: 6100, drift: 22 },
-      { x: 68, y: 12, size: 160, rotate: 5, delay: 200, duration: 5800, drift: 16 },
-      { x: 78, y: 48, size: 130, rotate: -5, delay: 700, duration: 6400, drift: 20 },
-      { x: 42, y: 8, size: 110, rotate: -3, delay: 300, duration: 5000, drift: 14 },
-      { x: 8, y: 62, size: 135, rotate: 4, delay: 500, duration: 7000, drift: 24 },
+      { x: 62, y: 8, size: 150, rotate: 5, delay: 0, duration: 5200, drift: 18 },
+      { x: 78, y: 38, size: 128, rotate: -6, delay: 400, duration: 6100, drift: 22 },
+      { x: 58, y: 52, size: 118, rotate: 4, delay: 200, duration: 5800, drift: 16 },
+      { x: 84, y: 68, size: 110, rotate: -4, delay: 700, duration: 6400, drift: 20 },
     ];
     return layout.map((L, i) => ({
       ...L,

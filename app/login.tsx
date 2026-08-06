@@ -80,11 +80,11 @@ export default function LoginScreen() {
             <View style={styles.heroCopy}>
               <Text style={styles.eyebrow}>Enter the atelier</Text>
               <Text style={styles.heroTitle}>
-                A living{'\n'}gallery{'\n'}operating{'\n'}system.
+                Craft that{'\n'}moves,{'\n'}vault that{'\n'}breathes.
               </Text>
               <Text style={styles.heroBody}>
-                Hover the floating frames. Watch the walls drift. Sign in to unlock the full
-                vault — logos, thumbnails, invites, reels.
+                Watch the walls drift. Sign in to unlock logos, thumbnails, invites, and reels —
+                curated the way a designer thinks.
               </Text>
               <View style={styles.statRow}>
                 <View style={styles.stat}>

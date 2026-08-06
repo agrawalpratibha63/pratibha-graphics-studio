@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import { StageReveal } from '@/components/StageReveal';
 import { Button, Card, LoadingBlock, Muted, Subtitle, Title } from '@/components/ui';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
@@ -16,6 +17,7 @@ export default function DashboardScreen() {
   const [loading, setLoading] = useState(true);
   const [importing, setImporting] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
+  const [focusTick, setFocusTick] = useState(0);
 
   const load = useCallback(async () => {
     const [w, v, e] = await Promise.all([
@@ -55,6 +57,7 @@ export default function DashboardScreen() {
   useFocusEffect(
     useCallback(() => {
       if (!isOwner) return;
+      setFocusTick((t) => t + 1);
       let cancelled = false;
       (async () => {
         setLoading(true);
@@ -89,6 +92,7 @@ export default function DashboardScreen() {
   const privateCount = works.filter((w) => w.visibility === 'private').length;
 
   return (
+    <StageReveal triggerKey={`admin-${focusTick}`}>
     <ScrollView
       style={styles.screen}
       contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}
@@ -159,6 +163,7 @@ export default function DashboardScreen() {
         </>
       )}
     </ScrollView>
+    </StageReveal>
   );
 }
 

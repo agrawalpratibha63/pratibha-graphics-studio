@@ -1,9 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { HeroIntro } from '@/components/HeroIntro';
 import { FeaturedTrain } from '@/components/FeaturedTrain';
-import { Body, Button, LoadingBlock, Muted } from '@/components/ui';
+import { VaultPortals } from '@/components/VaultPortals';
+import { StageReveal } from '@/components/StageReveal';
+import { Body, LoadingBlock, Muted } from '@/components/ui';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
 import type { OwnerProfile, Work } from '@/lib/types';
@@ -16,6 +18,7 @@ export default function HomeScreen() {
   const [featured, setFeatured] = useState<Work[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [focusTick, setFocusTick] = useState(0);
 
   const load = useCallback(async () => {
     const [op, feat] = await Promise.all([api.getOwnerProfile(), api.getFeaturedWorks()]);
@@ -25,6 +28,7 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      setFocusTick((t) => t + 1);
       setLoading(true);
       load()
         .catch(console.error)
@@ -32,48 +36,74 @@ export default function HomeScreen() {
     }, [load])
   );
 
+  const portals = useMemo(() => {
+    const base = [
+      {
+        key: 'library',
+        label: 'Library',
+        subtitle: 'Logos, thumbnails, invites, reels — the full vault.',
+        href: '/library',
+      },
+    ];
+    if (isOwner) {
+      base.push(
+        {
+          key: 'admin',
+          label: 'Admin',
+          subtitle: 'Upload, edit visibility, import starter work.',
+          href: '/dashboard',
+        },
+        {
+          key: 'visitors',
+          label: 'Visitors',
+          subtitle: 'Who stepped in — silent, tracked, yours to review.',
+          href: '/visitors',
+        }
+      );
+    }
+    return base;
+  }, [isOwner]);
+
   if (loading || !ownerProfile) return <LoadingBlock />;
 
   return (
-    <ScrollView
-      style={styles.screen}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          tintColor={colors.accent}
-          onRefresh={async () => {
-            setRefreshing(true);
-            await load();
-            setRefreshing(false);
-          }}
-        />
-      }
-    >
-      <HeroIntro profile={ownerProfile} />
-      <View style={styles.trainBlock}>
-        <FeaturedTrain
-          works={featured}
-          onPressWork={(work) => router.push(`/work/${work.id}`)}
-        />
-      </View>
-      <View style={styles.cta}>
-        <Text style={styles.sectionTitle}>Explore the library</Text>
-        <Body style={{ color: colors.textMuted }}>
-          Logos, thumbnails, social posts, and video — view only for visitors.
-        </Body>
-        <Button label="Open library" onPress={() => router.push('/library')} />
-        {isOwner && (
-          <Button
-            label="Owner dashboard"
-            variant="outline"
-            onPress={() => router.push('/dashboard')}
+    <StageReveal triggerKey={`home-${focusTick}`}>
+      <ScrollView
+        style={styles.screen}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            tintColor={colors.accent}
+            onRefresh={async () => {
+              setRefreshing(true);
+              await load();
+              setRefreshing(false);
+            }}
           />
-        )}
-        <Muted style={{ marginTop: 8 }}>
-          Signed in as {profile?.full_name}
-        </Muted>
-      </View>
-    </ScrollView>
+        }
+      >
+        <HeroIntro profile={ownerProfile} />
+        <View style={styles.trainBlock}>
+          <FeaturedTrain
+            works={featured}
+            onPressWork={(work) => router.push(`/work/${work.id}`)}
+          />
+        </View>
+
+        <VaultPortals
+          portals={portals}
+          onOpen={(href) => router.push(href as '/library')}
+        />
+
+        <View style={styles.footer}>
+          <Text style={styles.sectionTitle}>Same rooms. New doors.</Text>
+          <Body style={{ color: colors.textMuted }}>
+            Library, Admin, and Visitors stay — but each chamber opens with a reveal, not a dull tab switch.
+          </Body>
+          <Muted style={{ marginTop: 8 }}>Signed in as {profile?.full_name}</Muted>
+        </View>
+      </ScrollView>
+    </StageReveal>
   );
 }
 
@@ -87,14 +117,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.borderSoft,
   },
-  cta: {
+  footer: {
     padding: spacing.lg,
     gap: spacing.md,
     paddingBottom: spacing.xxl,
   },
   sectionTitle: {
     fontFamily: fonts.display,
-    fontSize: 28,
+    fontSize: 24,
     color: colors.text,
   },
 });

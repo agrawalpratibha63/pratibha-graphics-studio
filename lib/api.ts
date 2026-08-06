@@ -85,7 +85,7 @@ export const api = {
   async signInWithGoogle() {
     if (!isSupabaseConfigured) {
       throw new Error(
-        'Google sign-in is disabled for now. Use email and password.'
+        'Google sign-in needs Google enabled in Supabase Auth → Providers. Use email/password if Google is not configured yet.'
       );
     }
     const supabase = getSupabase()!;

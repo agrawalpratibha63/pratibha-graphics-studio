@@ -29,10 +29,12 @@ function TopNav() {
   }
 
   return (
-    <View style={[styles.nav, { paddingTop: Math.max(insets.top, 12) }]}>
+    <View style={[styles.nav, { paddingTop: Math.max(insets.top, 10) }]}>
       <Pressable onPress={() => router.push('/')} style={styles.brandWrap}>
-        <Text style={styles.brand}>{brand.name}</Text>
-        {!compact && <Text style={styles.tag}>{brand.tagline}</Text>}
+        <Text style={styles.os}>{brand.osName}</Text>
+        <Text style={styles.brand} numberOfLines={1}>
+          {compact ? 'Pratibha' : brand.name}
+        </Text>
       </Pressable>
       <View style={styles.links}>
         {links.map((link) => {
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
     paddingBottom: 12,
-    backgroundColor: colors.bgElevated,
+    backgroundColor: 'rgba(18,16,14,0.92)',
     borderBottomWidth: 1,
     borderBottomColor: colors.borderSoft,
     gap: 12,
@@ -96,18 +98,17 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     gap: 2,
   },
+  os: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 10,
+    letterSpacing: 2,
+    color: colors.accent,
+  },
   brand: {
     fontFamily: fonts.displayExtra,
-    fontSize: 20,
+    fontSize: 16,
     color: colors.text,
     letterSpacing: -0.3,
-  },
-  tag: {
-    fontFamily: fonts.body,
-    fontSize: 11,
-    color: colors.textMuted,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
   },
   links: {
     flexDirection: 'row',
@@ -123,6 +124,8 @@ const styles = StyleSheet.create({
   },
   linkActive: {
     backgroundColor: colors.accentSoft,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
   },
   linkText: {
     fontFamily: fonts.bodyMedium,
@@ -130,6 +133,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   linkTextActive: {
-    color: colors.text,
+    color: colors.accent,
   },
 });

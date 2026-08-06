@@ -6,14 +6,14 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pratibhagraphics",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.pratibhagraphics.studio"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FBF7F2",
+        "backgroundColor": "#070605",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -42,7 +42,7 @@
         {
           "image": "./assets/images/splash-icon.png",
           "resizeMode": "contain",
-          "backgroundColor": "#FBF7F2"
+          "backgroundColor": "#070605"
         }
       ],
       "expo-video"

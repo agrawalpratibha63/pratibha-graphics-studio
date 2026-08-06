@@ -60,7 +60,7 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <AuthGate>
         <Stack
           screenOptions={{

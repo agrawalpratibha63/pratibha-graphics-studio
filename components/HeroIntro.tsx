@@ -11,12 +11,14 @@ export function HeroIntro({ profile }: { profile: OwnerProfile }) {
   return (
     <View style={styles.wrap}>
       <LinearGradient
-        colors={[colors.heroWash, colors.bg, '#FFF9F2']}
+        colors={['#1A1410', '#0B0908', '#070605']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
       />
+      <View style={styles.beam} />
       <View style={styles.content}>
+        <Text style={styles.os}>{brand.osName}</Text>
         <Text style={styles.brand}>{brand.name}</Text>
         <Text style={styles.tagline}>{brand.tagline}</Text>
         <View style={styles.row}>
@@ -33,7 +35,7 @@ export function HeroIntro({ profile }: { profile: OwnerProfile }) {
           </View>
           <View style={styles.copy}>
             <Text style={styles.name}>{profile.display_name}</Text>
-            <Text style={styles.role}>Graphic Designer · Pratibha Graphics Studio</Text>
+            <Text style={styles.role}>Graphic Designer · Living Gallery</Text>
             <Body style={styles.bio}>{profile.bio}</Body>
           </View>
         </View>
@@ -75,25 +77,41 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.borderSoft,
     overflow: 'hidden',
   },
+  beam: {
+    position: 'absolute',
+    top: -40,
+    right: -20,
+    width: 220,
+    height: 420,
+    backgroundColor: colors.beam,
+    transform: [{ rotate: '18deg' }],
+  },
   content: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
     paddingBottom: spacing.xl,
     gap: spacing.lg,
   },
+  os: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    letterSpacing: 3,
+    color: colors.accent,
+  },
   brand: {
     fontFamily: fonts.displayExtra,
     fontSize: 13,
     letterSpacing: 3,
     textTransform: 'uppercase',
-    color: colors.accentDim,
+    color: colors.textMuted,
+    marginTop: -10,
   },
   tagline: {
     fontFamily: fonts.bodyMedium,
     fontSize: 12,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: colors.textMuted,
+    color: colors.textDim,
     marginTop: -12,
   },
   row: {
@@ -104,13 +122,9 @@ const styles = StyleSheet.create({
   photoWrap: {
     borderRadius: radii.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.glassBorder,
     overflow: 'hidden',
     backgroundColor: colors.bgElevated,
-    shadowColor: '#2C2118',
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
   },
   photo: {
     width: 148,
@@ -124,7 +138,7 @@ const styles = StyleSheet.create({
   initials: {
     fontFamily: fonts.displayExtra,
     fontSize: 36,
-    color: colors.accentDim,
+    color: colors.accent,
   },
   copy: {
     flex: 1,

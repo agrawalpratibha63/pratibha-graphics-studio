@@ -45,7 +45,7 @@ export function ChamberDiveOverlay() {
     <View style={[styles.root, { width, height }]} pointerEvents="none">
       <Animated.View style={[styles.bloom, bloom]}>
         <LinearGradient
-          colors={['rgba(226,180,87,0.45)', 'transparent']}
+          colors={[colors.accentSoft, 'transparent']}
           style={StyleSheet.absoluteFill}
         />
       </Animated.View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     elevation: 9000,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(7,6,5,0.55)',
+    backgroundColor: colors.overlay,
   },
   bloom: {
     ...StyleSheet.absoluteFill,

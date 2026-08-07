@@ -77,7 +77,7 @@ export function AtelierFoyer({
     >
       <View style={[styles.stage, { minHeight: Math.min(stageH, height * 0.92) }]}>
         <LinearGradient
-          colors={['#120E0B', '#070605', '#0A0807']}
+          colors={[colors.washStart, colors.washMid, colors.washEnd]}
           style={StyleSheet.absoluteFill}
         />
         <View style={styles.floorGlow} pointerEvents="none" />
@@ -252,7 +252,7 @@ function ChamberDoor({
       <Animated.View style={[styles.door, style]}>
         <Animated.View style={[styles.spill, spill]} pointerEvents="none">
           <LinearGradient
-            colors={['rgba(226,180,87,0.4)', 'transparent']}
+            colors={[colors.accentSoft, 'transparent']}
             style={StyleSheet.absoluteFill}
           />
         </Animated.View>
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     right: '10%',
     bottom: 0,
     height: 120,
-    backgroundColor: 'rgba(226,180,87,0.06)',
+    backgroundColor: colors.beam,
     borderTopLeftRadius: 200,
     borderTopRightRadius: 200,
     zIndex: 0,
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: 'rgba(18,16,14,0.88)',
+    backgroundColor: colors.doorFace,
     padding: spacing.lg,
     overflow: 'hidden',
     justifyContent: 'center',

@@ -145,7 +145,7 @@ export function VaultUnlock() {
   return (
     <Animated.View style={[styles.root, { width, height }, rootStyle]} pointerEvents="auto">
       <LinearGradient
-        colors={['#050403', '#0C0A08', '#070605']}
+        colors={[colors.unlockVoid, colors.washStart, colors.washEnd]}
         style={StyleSheet.absoluteFill}
       />
 
@@ -157,14 +157,14 @@ export function VaultUnlock() {
       <View style={styles.doorRow}>
         <Animated.View style={[styles.door, styles.doorLeft, leftDoor]}>
           <LinearGradient
-            colors={['#1A1612', '#0E0C0A', '#16120F']}
+            colors={[colors.bgElevated, colors.heroWash, colors.bgCard]}
             style={StyleSheet.absoluteFill}
           />
           <View style={styles.doorEdge} />
         </Animated.View>
         <Animated.View style={[styles.door, styles.doorRight, rightDoor]}>
           <LinearGradient
-            colors={['#16120F', '#0E0C0A', '#1A1612']}
+            colors={[colors.bgCard, colors.heroWash, colors.bgElevated]}
             style={StyleSheet.absoluteFill}
           />
           <View style={[styles.doorEdge, styles.doorEdgeRight]} />
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   haze: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(226,180,87,0.04)',
+    backgroundColor: colors.beam,
   },
   slit: {
     position: 'absolute',
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     width: 10,
-    backgroundColor: 'rgba(226,180,87,0.12)',
+    backgroundColor: colors.accentSoft,
   },
   doorEdgeRight: {
     right: undefined,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   tunnelPlaceholder: {
-    backgroundColor: '#2A241E',
+    backgroundColor: colors.bgCard,
   },
   centerCopy: {
     ...StyleSheet.absoluteFill,

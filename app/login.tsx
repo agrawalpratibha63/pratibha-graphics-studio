@@ -105,7 +105,7 @@ export default function LoginScreen() {
 
           <View style={styles.panel}>
             <LinearGradient
-              colors={['rgba(226,180,87,0.12)', 'transparent']}
+              colors={[colors.accentSoft, 'transparent']}
               style={styles.panelGlow}
             />
             <Text style={styles.kicker}>{brand.ownerName}</Text>
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: colors.borderSoft,
-    backgroundColor: 'rgba(7,6,5,0.65)',
+    backgroundColor: colors.glass,
     zIndex: 5,
   },
   osDot: {

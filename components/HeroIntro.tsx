@@ -11,7 +11,7 @@ export function HeroIntro({ profile }: { profile: OwnerProfile }) {
   return (
     <View style={styles.wrap}>
       <LinearGradient
-        colors={['#1A1410', '#0B0908', '#070605']}
+        colors={[colors.washStart, colors.washMid, colors.washEnd]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}

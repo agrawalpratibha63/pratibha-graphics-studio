@@ -137,12 +137,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    backgroundColor: 'rgba(21, 32, 43, 0.62)',
+    backgroundColor: 'rgba(7,6,5,0.7)',
   },
   captionText: {
     fontFamily: fonts.bodyMedium,
     fontSize: 12,
-    color: colors.paper,
+    color: colors.text,
   },
   empty: {
     paddingHorizontal: spacing.lg,

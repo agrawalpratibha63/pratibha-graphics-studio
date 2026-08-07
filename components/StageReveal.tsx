@@ -59,7 +59,7 @@ export function StageReveal({
       </Animated.View>
       <Animated.View pointerEvents="none" style={[styles.bloom, bloomStyle]}>
         <LinearGradient
-          colors={[colors.accentSoft, 'transparent']}
+          colors={['rgba(226,180,87,0.28)', 'transparent']}
           style={StyleSheet.absoluteFill}
         />
       </Animated.View>

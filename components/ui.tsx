@@ -66,12 +66,12 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'primary' ? colors.paper : colors.accent} />
+        <ActivityIndicator color={variant === 'primary' ? colors.ink : colors.accent} />
       ) : (
         <Text
           style={[
             styles.btnText,
-            variant === 'primary' && { color: colors.paper },
+            variant === 'primary' && { color: colors.ink },
             variant !== 'primary' && { color: colors.text },
             variant === 'danger' && { color: colors.danger },
           ]}

@@ -93,7 +93,7 @@ function FloatingFrame({
       >
         <Image source={{ uri: spec.uri }} style={styles.frameImage} />
         <LinearGradient
-          colors={['transparent', 'rgba(21, 32, 43, 0.55)']}
+          colors={['transparent', 'rgba(7,6,5,0.85)']}
           style={styles.frameShade}
         />
         <Text numberOfLines={1} style={styles.frameTitle}>
@@ -194,7 +194,7 @@ export function CinematicGalleryBg() {
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
       <LinearGradient
-        colors={[colors.washStart, colors.washMid, colors.heroWash]}
+        colors={['#140F0A', '#070605', '#0C0A08']}
         style={StyleSheet.absoluteFill}
       />
       <Animated.View style={[styles.beam, beamStyle]} />
@@ -211,7 +211,7 @@ export function CinematicGalleryBg() {
       ))}
 
       <LinearGradient
-        colors={['rgba(240, 243, 246, 0.2)', 'rgba(240, 243, 246, 0.55)', 'rgba(240, 243, 246, 0.92)']}
+        colors={['rgba(7,6,5,0.15)', 'rgba(7,6,5,0.55)', 'rgba(7,6,5,0.88)']}
         style={StyleSheet.absoluteFill}
         pointerEvents="none"
       />
@@ -236,8 +236,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    opacity: 0.05,
-    backgroundColor: colors.accent,
+    opacity: 0.07,
+    backgroundColor: '#E2B457',
   },
   frame: {
     position: 'absolute',
@@ -246,10 +246,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.glassBorder,
     backgroundColor: colors.bgCard,
-    shadowColor: '#15202B',
-    shadowOpacity: 0.12,
+    shadowColor: '#000',
+    shadowOpacity: 0.45,
     shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: { width: 0, height: 10 },
   },
   frameInner: {
     flex: 1,
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     bottom: 8,
     fontFamily: fonts.bodyMedium,
     fontSize: 10,
-    color: colors.paper,
+    color: colors.text,
   },
   lane: {
     position: 'absolute',

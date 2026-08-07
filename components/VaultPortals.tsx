@@ -124,7 +124,7 @@ function PortalDoor({
         {/* Layer behind the face — emerges on click */}
         <Animated.View style={[styles.behind, behindStyle]} pointerEvents="none">
           <LinearGradient
-            colors={[colors.accentSoft, colors.glass]}
+            colors={['rgba(226,180,87,0.35)', 'rgba(18,16,14,0.95)']}
             style={StyleSheet.absoluteFill}
           />
           <Text style={styles.behindText}>Entering {portal.label}</Text>
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   door: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(12,10,9,0.72)',
     borderColor: colors.glassBorder,
   },
   doorLeft: {

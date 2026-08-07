@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   behind: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     zIndex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   doorStage: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     flexDirection: 'row',
     zIndex: 3,
   },

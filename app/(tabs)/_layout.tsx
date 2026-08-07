@@ -3,15 +3,19 @@ import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-na
 import { Tabs, useRouter, usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/contexts/AuthContext';
+import { useStudioExperience } from '@/contexts/StudioExperienceContext';
 import { brand, colors, fonts, spacing } from '@/constants/theme';
 
-function TopNav() {
+function FilmStripNav() {
   const { isOwner, signOut } = useAuth();
+  const { isUnlocking, enterChamber } = useStudioExperience();
   const router = useRouter();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const compact = width < 720;
+
+  if (isUnlocking) return null;
 
   const links = [
     { href: '/', label: 'Home', match: ['/', '/index'] },
@@ -29,11 +33,15 @@ function TopNav() {
   }
 
   return (
-    <View style={[styles.nav, { paddingTop: Math.max(insets.top, 10) }]}>
+    <View style={[styles.nav, { paddingTop: Math.max(insets.top, 8) }]}>
       <Pressable onPress={() => router.push('/')} style={styles.brandWrap}>
-        <Text style={styles.os}>{brand.osName}</Text>
+        <View style={styles.sprocketRow}>
+          <View style={styles.sprocket} />
+          <View style={styles.sprocket} />
+          <View style={styles.sprocket} />
+        </View>
         <Text style={styles.brand} numberOfLines={1}>
-          {compact ? 'Pratibha' : brand.name}
+          {compact ? 'Studio' : brand.name}
         </Text>
       </Pressable>
       <View style={styles.links}>
@@ -42,7 +50,13 @@ function TopNav() {
           return (
             <Pressable
               key={link.href}
-              onPress={() => router.push(link.href as '/')}
+              onPress={() => {
+                if (link.href === '/') {
+                  router.push('/');
+                  return;
+                }
+                enterChamber(link.href, link.label);
+              }}
               style={[styles.link, isActive && styles.linkActive]}
             >
               <Text style={[styles.linkText, isActive && styles.linkTextActive]}>
@@ -62,7 +76,7 @@ function TopNav() {
 export default function TabsLayout() {
   return (
     <View style={styles.root}>
-      <TopNav />
+      <FilmStripNav />
       <Tabs
         screenOptions={{
           headerShown: false,
@@ -88,49 +102,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
-    paddingBottom: 12,
-    backgroundColor: 'rgba(18,16,14,0.92)',
+    paddingBottom: 10,
+    backgroundColor: 'rgba(12,10,9,0.94)',
     borderBottomWidth: 1,
     borderBottomColor: colors.borderSoft,
     gap: 12,
   },
   brandWrap: {
     flexShrink: 1,
-    gap: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
-  os: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 10,
-    letterSpacing: 2,
-    color: colors.accent,
+  sprocketRow: {
+    flexDirection: 'row',
+    gap: 3,
+  },
+  sprocket: {
+    width: 5,
+    height: 5,
+    borderRadius: 1,
+    backgroundColor: colors.accentDim,
+    opacity: 0.7,
   },
   brand: {
     fontFamily: fonts.displayExtra,
-    fontSize: 16,
+    fontSize: 14,
     color: colors.text,
-    letterSpacing: -0.3,
+    letterSpacing: 0.2,
   },
   links: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
     justifyContent: 'flex-end',
-    gap: 6,
+    gap: 4,
   },
   link: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   linkActive: {
-    backgroundColor: colors.accentSoft,
-    borderWidth: 1,
     borderColor: colors.glassBorder,
+    backgroundColor: colors.accentSoft,
   },
   linkText: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 13,
+    fontSize: 12,
+    letterSpacing: 0.6,
     color: colors.textMuted,
+    textTransform: 'uppercase',
   },
   linkTextActive: {
     color: colors.accent,

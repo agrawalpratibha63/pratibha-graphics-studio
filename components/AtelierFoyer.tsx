@@ -67,7 +67,7 @@ export function AtelierFoyer({
     transform: [{ translateY: interpolate(enter.value, [0, 1], [30, 0]) }],
   }));
 
-  const floatFrames = featured.slice(0, 5);
+  const floatFrames = featured.slice(0, 4);
 
   return (
     <ScrollView
@@ -75,28 +75,32 @@ export function AtelierFoyer({
       contentContainerStyle={{ paddingBottom: spacing.xxl }}
       showsVerticalScrollIndicator={false}
     >
-      <View style={[styles.stage, { minHeight: stageH, height: stageH }]}>
+      <View style={[styles.stage, { minHeight: Math.min(stageH, height * 0.92) }]}>
         <LinearGradient
           colors={['#120E0B', '#070605', '#0A0807']}
           style={StyleSheet.absoluteFill}
         />
-        <View style={styles.floorGlow} />
+        <View style={styles.floorGlow} pointerEvents="none" />
 
-        {floatFrames.map((work, i) => (
-          <FloatFrame
-            key={work.id}
-            uri={workUri(work)}
-            index={i}
-            width={width}
-            height={stageH}
-            drift={drift}
-            onPress={() => onPressWork(work)}
-          />
-        ))}
+        <View style={styles.floatLayer} pointerEvents="box-none">
+          {floatFrames.map((work, i) => (
+            <FloatFrame
+              key={work.id}
+              uri={workUri(work)}
+              index={i}
+              width={width}
+              height={stageH}
+              drift={drift}
+              onPress={() => onPressWork(work)}
+            />
+          ))}
+        </View>
 
         <Animated.View style={[styles.hero, heroStyle]}>
           <Text style={styles.kicker}>You are inside</Text>
-          <Text style={styles.brand}>{brand.name}</Text>
+          <Text style={styles.brand} numberOfLines={2}>
+            {brand.name}
+          </Text>
           <Text style={styles.tag}>Step into a chamber — the walls will open</Text>
         </Animated.View>
 
@@ -158,12 +162,11 @@ function FloatFrame({
   onPress: () => void;
 }) {
   const layout = [
-    { x: 0.06, y: 0.12, s: 0.9, r: -8 },
-    { x: 0.72, y: 0.1, s: 1, r: 6 },
-    { x: 0.08, y: 0.48, s: 0.85, r: 4 },
-    { x: 0.7, y: 0.42, s: 0.92, r: -5 },
-    { x: 0.4, y: 0.08, s: 0.75, r: 3 },
-  ][index] ?? { x: 0.5, y: 0.2, s: 0.8, r: 0 };
+    { x: 0.04, y: 0.18, s: 0.85, r: -7 },
+    { x: 0.78, y: 0.16, s: 0.9, r: 5 },
+    { x: 0.05, y: 0.58, s: 0.8, r: 4 },
+    { x: 0.76, y: 0.55, s: 0.88, r: -4 },
+  ][index] ?? { x: 0.8, y: 0.3, s: 0.8, r: 0 };
 
   const cardW = Math.min(150, width * 0.22);
 
@@ -268,11 +271,17 @@ const styles = StyleSheet.create({
   },
   stage: {
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'visible',
     borderBottomWidth: 1,
     borderBottomColor: colors.borderSoft,
-    justifyContent: 'flex-end',
+    paddingTop: spacing.xl,
     paddingBottom: spacing.xl,
+    justifyContent: 'flex-start',
+  },
+  floatLayer: {
+    ...StyleSheet.absoluteFill,
+    zIndex: 1,
+    overflow: 'hidden',
   },
   floorGlow: {
     position: 'absolute',
@@ -283,11 +292,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(226,180,87,0.06)',
     borderTopLeftRadius: 200,
     borderTopRightRadius: 200,
+    zIndex: 0,
   },
   hero: {
     zIndex: 5,
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
+    paddingTop: spacing.sm,
   },
   kicker: {
     fontFamily: fonts.bodyMedium,
@@ -295,18 +306,21 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     textTransform: 'uppercase',
     color: colors.accent,
+    marginBottom: 6,
   },
   brand: {
-    marginTop: 8,
     fontFamily: fonts.displayExtra,
-    fontSize: 40,
+    fontSize: 36,
+    lineHeight: 44,
     color: colors.text,
-    letterSpacing: -0.8,
+    letterSpacing: -0.6,
+    paddingVertical: 4,
   },
   tag: {
-    marginTop: 8,
+    marginTop: 10,
     fontFamily: fonts.body,
     fontSize: 15,
+    lineHeight: 22,
     color: colors.textMuted,
     maxWidth: 420,
   },
@@ -359,6 +373,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.glassBorder,
     backgroundColor: colors.bgCard,
+    opacity: 0.55,
   },
   floatPress: {
     flex: 1,

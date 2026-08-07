@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Button, Chip, Field, LoadingBlock, Muted, Subtitle } from '@/components/ui';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,6 +20,7 @@ export default function EditWorkScreen() {
   const [featuredOrder, setFeaturedOrder] = useState('1');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
     const [w, cats] = await Promise.all([api.getWork(id, true), api.getCategories(true)]);
@@ -70,21 +71,38 @@ export default function EditWorkScreen() {
   }
 
   async function remove() {
+    const go = async () => {
+      setDeleting(true);
+      try {
+        await api.deleteWork(work!.id);
+        router.replace('/dashboard');
+      } catch (e) {
+        Alert.alert('Delete failed', e instanceof Error ? e.message : 'Unknown error');
+        setDeleting(false);
+      }
+    };
+
+    if (Platform.OS === 'web') {
+      if (
+        typeof window !== 'undefined' &&
+        window.confirm('Delete this work? This cannot be undone.')
+      ) {
+        await go();
+      }
+      return;
+    }
+
     Alert.alert('Delete work?', 'This cannot be undone.', [
       { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          await api.deleteWork(work!.id);
-          router.replace('/library');
-        },
-      },
+      { text: 'Delete', style: 'destructive', onPress: () => void go() },
     ]);
   }
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}
+    >
       <Subtitle>Edit work</Subtitle>
       <Field label="Title" value={title} onChangeText={setTitle} />
       <Field
@@ -120,13 +138,18 @@ export default function EditWorkScreen() {
         />
       )}
       <Button label="Save changes" onPress={save} loading={saving} />
-      <Button label="Delete work" variant="danger" onPress={remove} />
+      <Button label="Delete work" variant="danger" onPress={remove} loading={deleting} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.bg,
+  },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
 });

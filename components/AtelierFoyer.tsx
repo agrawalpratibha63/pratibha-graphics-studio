@@ -97,11 +97,32 @@ export function AtelierFoyer({
         </View>
 
         <Animated.View style={[styles.hero, heroStyle]}>
-          <Text style={styles.kicker}>You are inside</Text>
+          <View style={styles.availabilityRow}>
+            <View style={styles.liveDot} />
+            <Text style={styles.kicker}>Available for selected projects</Text>
+          </View>
           <Text style={styles.brand} numberOfLines={2}>
-            {brand.name}
+            Visual identities{`\n`}built to be remembered.
           </Text>
-          <Text style={styles.tag}>Step into a chamber — the walls will open</Text>
+          <Text style={styles.tag}>
+            Brand systems, campaign graphics and digital experiences for founders and teams
+            who want to look unmistakably their own.
+          </Text>
+          <View style={styles.heroActions}>
+            <Pressable
+              onPress={() => enterChamber('/library', 'Selected work')}
+              style={styles.primaryAction}
+            >
+              <Text style={styles.primaryActionText}>Explore selected work</Text>
+              <Text style={styles.actionArrow}>↗</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => Linking.openURL(`mailto:${profile.email}?subject=Project enquiry — Pratibha Graphics Studio`)}
+              style={styles.secondaryAction}
+            >
+              <Text style={styles.secondaryActionText}>Start a project</Text>
+            </Pressable>
+          </View>
         </Animated.View>
 
         <View style={styles.doorRow}>
@@ -115,6 +136,90 @@ export function AtelierFoyer({
             />
           ))}
         </View>
+      </View>
+
+      <View style={styles.proofStrip}>
+        {['Brand identity', 'Social campaigns', 'YouTube systems', 'Motion & reels'].map(
+          (item, index) => (
+            <View key={item} style={styles.proofItem}>
+              <Text style={styles.proofNumber}>0{index + 1}</Text>
+              <Text style={styles.proofText}>{item}</Text>
+            </View>
+          )
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <View style={styles.sectionHeading}>
+          <Text style={styles.sectionEyebrow}>Design capabilities</Text>
+          <Text style={styles.sectionTitle}>One studio. Four ways to move a brand forward.</Text>
+          <Text style={styles.sectionBody}>
+            Thoughtful design systems made for real launches, real campaigns and consistent
+            day-to-day communication.
+          </Text>
+        </View>
+        <View style={styles.serviceGrid}>
+          {[
+            ['01', 'Brand identity', 'Logos, visual language, colour and typography systems that make a young brand feel established.'],
+            ['02', 'Campaign design', 'Launch graphics, social campaigns and adaptable creative systems built for consistent output.'],
+            ['03', 'Creator visuals', 'Thumbnail families, channel art and recognisable visual formats designed to earn attention.'],
+            ['04', 'Motion stories', 'Reels, animated assets and presentation-led storytelling for products, events and communities.'],
+          ].map(([number, title, copy]) => (
+            <View key={number} style={styles.serviceCard}>
+              <View style={styles.serviceTop}>
+                <Text style={styles.serviceNumber}>{number}</Text>
+                <Text style={styles.serviceArrow}>↗</Text>
+              </View>
+              <Text style={styles.serviceTitle}>{title}</Text>
+              <Text style={styles.serviceCopy}>{copy}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={[styles.section, styles.processSection]}>
+        <View style={styles.sectionHeading}>
+          <Text style={styles.sectionEyebrow}>A clear collaboration</Text>
+          <Text style={styles.sectionTitle}>From brief to a system your team can actually use.</Text>
+        </View>
+        <View style={styles.processGrid}>
+          {[
+            ['Discover', 'We define the audience, business goal and visual opportunity.'],
+            ['Direct', 'You receive a focused creative direction before production begins.'],
+            ['Design', 'The selected direction becomes a consistent, flexible asset system.'],
+            ['Deliver', 'Organised final files, usage guidance and launch-ready exports.'],
+          ].map(([title, copy], index) => (
+            <View key={title} style={styles.processStep}>
+              <Text style={styles.processIndex}>0{index + 1}</Text>
+              <View style={styles.processLine} />
+              <Text style={styles.processTitle}>{title}</Text>
+              <Text style={styles.processCopy}>{copy}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={styles.ctaWrap}>
+        <LinearGradient
+          colors={['rgba(226,180,87,0.2)', 'rgba(18,16,14,0.96)']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.ctaCard}
+        >
+          <Text style={styles.ctaKicker}>Have a project in mind?</Text>
+          <Text style={styles.ctaTitle}>Let’s turn the brief into something people remember.</Text>
+          <Text style={styles.ctaBody}>
+            Share the goal, timeline and deliverables. You’ll receive a focused response with the
+            best next step for your project.
+          </Text>
+          <Pressable
+            onPress={() => Linking.openURL(`mailto:${profile.email}?subject=Project enquiry — Pratibha Graphics Studio`)}
+            style={styles.ctaButton}
+          >
+            <Text style={styles.ctaButtonText}>Send project brief</Text>
+            <Text style={styles.ctaButtonArrow}>→</Text>
+          </Pressable>
+        </LinearGradient>
       </View>
 
       {/* Quiet plaque — secondary */}
@@ -300,6 +405,20 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     paddingTop: spacing.sm,
   },
+  availabilityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  liveDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: colors.success,
+    shadowColor: colors.success,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+  },
   kicker: {
     fontFamily: fonts.bodyMedium,
     fontSize: 11,
@@ -323,6 +442,45 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.textMuted,
     maxWidth: 420,
+  },
+  heroActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: spacing.lg,
+  },
+  primaryAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+    borderRadius: radii.pill,
+    paddingHorizontal: 18,
+    paddingVertical: 13,
+    backgroundColor: colors.accent,
+  },
+  primaryActionText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 13,
+    color: colors.ink,
+  },
+  actionArrow: {
+    fontFamily: fonts.bodyBold,
+    color: colors.ink,
+    fontSize: 15,
+  },
+  secondaryAction: {
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
+    borderRadius: radii.pill,
+    paddingHorizontal: 18,
+    paddingVertical: 13,
+    backgroundColor: colors.glass,
+  },
+  secondaryActionText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 13,
+    color: colors.text,
   },
   doorRow: {
     zIndex: 6,
@@ -381,6 +539,213 @@ const styles = StyleSheet.create({
   floatImg: {
     width: '100%',
     height: '100%',
+  },
+  proofStrip: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderSoft,
+    backgroundColor: colors.bgElevated,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    gap: spacing.md,
+  },
+  proofItem: {
+    flexGrow: 1,
+    flexBasis: 180,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 8,
+  },
+  proofNumber: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 10,
+    letterSpacing: 1.5,
+    color: colors.accentDim,
+  },
+  proofText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 13,
+    color: colors.textMuted,
+  },
+  section: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xxl,
+    gap: spacing.xl,
+  },
+  sectionHeading: {
+    maxWidth: 720,
+    gap: 10,
+  },
+  sectionEyebrow: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+    color: colors.accent,
+  },
+  sectionTitle: {
+    fontFamily: fonts.displayExtra,
+    fontSize: 34,
+    lineHeight: 40,
+    letterSpacing: -0.7,
+    color: colors.text,
+  },
+  sectionBody: {
+    maxWidth: 560,
+    fontFamily: fonts.body,
+    fontSize: 15,
+    lineHeight: 23,
+    color: colors.textMuted,
+  },
+  serviceGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+  },
+  serviceCard: {
+    flexGrow: 1,
+    flexBasis: 250,
+    minHeight: 230,
+    justifyContent: 'flex-end',
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
+    backgroundColor: colors.bgCard,
+    padding: spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 18 },
+    shadowOpacity: 0.3,
+    shadowRadius: 28,
+  },
+  serviceTop: {
+    position: 'absolute',
+    top: spacing.lg,
+    left: spacing.lg,
+    right: spacing.lg,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  serviceNumber: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    color: colors.accent,
+    letterSpacing: 2,
+  },
+  serviceArrow: {
+    fontFamily: fonts.body,
+    fontSize: 18,
+    color: colors.textDim,
+  },
+  serviceTitle: {
+    fontFamily: fonts.display,
+    fontSize: 24,
+    color: colors.text,
+    marginBottom: 8,
+  },
+  serviceCopy: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.textMuted,
+  },
+  processSection: {
+    backgroundColor: colors.bgElevated,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.borderSoft,
+  },
+  processGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.lg,
+  },
+  processStep: {
+    flexGrow: 1,
+    flexBasis: 210,
+    minHeight: 170,
+  },
+  processIndex: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    letterSpacing: 2,
+    color: colors.accent,
+  },
+  processLine: {
+    width: '100%',
+    height: 1,
+    marginVertical: spacing.md,
+    backgroundColor: colors.border,
+  },
+  processTitle: {
+    fontFamily: fonts.display,
+    fontSize: 21,
+    color: colors.text,
+    marginBottom: 7,
+  },
+  processCopy: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.textMuted,
+  },
+  ctaWrap: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xxl,
+  },
+  ctaCard: {
+    minHeight: 340,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
+    padding: spacing.xl,
+    overflow: 'hidden',
+  },
+  ctaKicker: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+    color: colors.accent,
+    marginBottom: spacing.md,
+  },
+  ctaTitle: {
+    maxWidth: 720,
+    fontFamily: fonts.displayExtra,
+    fontSize: 35,
+    lineHeight: 41,
+    color: colors.text,
+  },
+  ctaBody: {
+    maxWidth: 580,
+    marginTop: 12,
+    fontFamily: fonts.body,
+    fontSize: 15,
+    lineHeight: 23,
+    color: colors.textMuted,
+  },
+  ctaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.lg,
+    marginTop: spacing.lg,
+    borderRadius: radii.pill,
+    backgroundColor: colors.paper,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+  },
+  ctaButtonText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 13,
+    color: colors.ink,
+  },
+  ctaButtonArrow: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 16,
+    color: colors.ink,
   },
   plaque: {
     padding: spacing.lg,

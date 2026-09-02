@@ -7,7 +7,7 @@ import { useStudioExperience } from '@/contexts/StudioExperienceContext';
 import { brand, colors, fonts, spacing } from '@/constants/theme';
 
 function FilmStripNav() {
-  const { isOwner, signOut } = useAuth();
+  const { user, isOwner, signOut } = useAuth();
   const { isUnlocking, enterChamber } = useStudioExperience();
   const router = useRouter();
   const pathname = usePathname();
@@ -19,10 +19,10 @@ function FilmStripNav() {
 
   const links = [
     { href: '/', label: 'Home', match: ['/', '/index'] },
-    { href: '/library', label: 'Library', match: ['/library'] },
+    { href: '/library', label: 'Work', match: ['/library'] },
     ...(isOwner
       ? [
-          { href: '/dashboard', label: 'Admin', match: ['/dashboard'] },
+          { href: '/dashboard', label: 'Studio', match: ['/dashboard'] },
           { href: '/visitors', label: 'Visitors', match: ['/visitors'] },
         ]
       : []),
@@ -41,7 +41,7 @@ function FilmStripNav() {
           <View style={styles.sprocket} />
         </View>
         <Text style={styles.brand} numberOfLines={1}>
-          {compact ? 'Studio' : brand.name}
+          {compact ? 'PG Studio' : brand.name}
         </Text>
       </Pressable>
       <View style={styles.links}>
@@ -65,9 +65,15 @@ function FilmStripNav() {
             </Pressable>
           );
         })}
-        <Pressable onPress={() => signOut()} style={styles.link}>
-          <Text style={styles.linkText}>Sign out</Text>
-        </Pressable>
+        {user ? (
+          <Pressable onPress={() => signOut()} style={styles.link}>
+            <Text style={styles.linkText}>Sign out</Text>
+          </Pressable>
+        ) : (
+          <Pressable onPress={() => router.push('/login')} style={styles.accessLink}>
+            <Text style={styles.accessText}>Studio access</Text>
+          </Pressable>
+        )}
       </View>
     </View>
   );
@@ -84,8 +90,8 @@ export default function TabsLayout() {
         }}
       >
         <Tabs.Screen name="index" options={{ title: 'Home' }} />
-        <Tabs.Screen name="library" options={{ title: 'Library' }} />
-        <Tabs.Screen name="dashboard" options={{ title: 'Dashboard' }} />
+        <Tabs.Screen name="library" options={{ title: 'Work' }} />
+        <Tabs.Screen name="dashboard" options={{ title: 'Studio' }} />
         <Tabs.Screen name="visitors" options={{ title: 'Visitors' }} />
       </Tabs>
     </View>
@@ -158,5 +164,20 @@ const styles = StyleSheet.create({
   },
   linkTextActive: {
     color: colors.accent,
+  },
+  accessLink: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.accentDim,
+    backgroundColor: colors.accentSoft,
+  },
+  accessText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    letterSpacing: 0.7,
+    color: colors.accent,
+    textTransform: 'uppercase',
   },
 });

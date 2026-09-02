@@ -24,20 +24,37 @@ SplashScreen.preventAutoHideAsync();
 
 export { ErrorBoundary } from 'expo-router';
 
+const OWNER_ONLY_ROUTES = new Set([
+  'dashboard',
+  'visitors',
+  'upload',
+  'edit-work',
+  'categories',
+  'edit-intro',
+]);
+
 function AuthGate({ children }: { children: React.ReactNode }) {
-  const { loading, user } = useAuth();
+  const { loading, user, isOwner } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     if (loading) return;
-    const inAuth = segments[0] === 'login';
-    if (!user && !inAuth) {
+
+    const first = segments[0];
+    const second = segments[1];
+    const routeKey = first === '(tabs)' ? second : first;
+    const needsOwner = routeKey ? OWNER_ONLY_ROUTES.has(routeKey) : false;
+
+    if (needsOwner && (!user || !isOwner)) {
       router.replace('/login');
-    } else if (user && inAuth) {
+      return;
+    }
+
+    if (user && first === 'login') {
       router.replace('/(tabs)');
     }
-  }, [loading, user, segments, router]);
+  }, [loading, user, isOwner, segments, router]);
 
   if (loading) return <LoadingBlock />;
   return <>{children}</>;
@@ -89,7 +106,7 @@ export default function RootLayout() {
             >
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="login" options={{ headerShown: false }} />
-              <Stack.Screen name="work/[id]" options={{ title: 'Work' }} />
+              <Stack.Screen name="work/[id]" options={{ title: 'Case Study' }} />
               <Stack.Screen name="upload" options={{ title: 'Upload work', presentation: 'modal' }} />
               <Stack.Screen name="edit-work/[id]" options={{ title: 'Edit work' }} />
               <Stack.Screen name="categories" options={{ title: 'Categories' }} />

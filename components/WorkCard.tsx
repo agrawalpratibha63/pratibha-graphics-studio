@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -13,18 +14,26 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 export function WorkCard({
   work,
   width,
+  categoryName,
   onPress,
   onLongPress,
 }: {
   work: Work;
   width: number;
+  categoryName?: string;
   onPress: () => void;
   onLongPress?: () => void;
 }) {
-  const scale = useSharedValue(1);
+  const motion = useSharedValue(0);
   const [imgError, setImgError] = useState(false);
   const style = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+    transform: [
+      { perspective: 900 },
+      { translateY: interpolate(motion.value, [0, 1], [0, -7]) },
+      { rotateX: `${interpolate(motion.value, [0, 1], [0, 2.2])}deg` },
+      { rotateY: `${interpolate(motion.value, [0, 1], [0, -2.2])}deg` },
+      { scale: interpolate(motion.value, [0, 1], [1, 1.025]) },
+    ],
   }));
 
   const previewUri =
@@ -32,22 +41,23 @@ export function WorkCard({
       ? work.storage_path
       : work.thumb_path || work.storage_path;
   const showImage = Boolean(previewUri) && !imgError && work.media_type !== 'document';
+  const intro = work.description?.trim() || 'A selected visual from the Pratibha Graphics Studio portfolio.';
 
   return (
     <AnimatedPressable
       onPress={onPress}
       onLongPress={onLongPress}
       onHoverIn={() => {
-        scale.value = withSpring(1.04, { damping: 14, stiffness: 220 });
+        motion.value = withSpring(1, { damping: 16, stiffness: 190 });
       }}
       onHoverOut={() => {
-        scale.value = withSpring(1);
+        motion.value = withSpring(0, { damping: 16, stiffness: 190 });
       }}
       onPressIn={() => {
-        scale.value = withSpring(0.96);
+        motion.value = withSpring(0.45);
       }}
       onPressOut={() => {
-        scale.value = withSpring(1);
+        motion.value = withSpring(0);
       }}
       style={[styles.card, style, { width }]}
     >
@@ -62,25 +72,31 @@ export function WorkCard({
         ) : (
           <View style={[styles.media, styles.fallback]}>
             <Text style={styles.fallbackText}>
-              {work.media_type === 'video' ? '▶ VIDEO' : work.media_type === 'document' ? 'DOC' : 'IMG'}
+              {work.media_type === 'video' ? '▶ MOTION' : work.media_type === 'document' ? 'CASE FILE' : 'VISUAL'}
             </Text>
           </View>
         )}
+        <View style={styles.shade} />
         {work.visibility === 'featured' && (
           <View style={styles.corner}>
-            <Text style={styles.cornerText}>★</Text>
+            <Text style={styles.cornerText}>FEATURED</Text>
           </View>
         )}
-        {work.media_type === 'video' && (
-          <View style={styles.playBadge}>
-            <Text style={styles.playText}>VIDEO</Text>
-          </View>
-        )}
+        <View style={styles.mediaLabel}>
+          <Text style={styles.mediaLabelText}>{categoryName || 'Selected work'}</Text>
+        </View>
       </View>
       <View style={styles.meta}>
-        <Text numberOfLines={2} style={styles.title}>
-          {work.title}
+        <View style={styles.titleRow}>
+          <Text numberOfLines={2} style={styles.title}>
+            {work.title}
+          </Text>
+          <Text style={styles.arrow}>↗</Text>
+        </View>
+        <Text numberOfLines={3} style={styles.description}>
+          {intro}
         </Text>
+        <Text style={styles.caseLink}>View project story</Text>
       </View>
     </AnimatedPressable>
   );
@@ -93,17 +109,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderSoft,
     backgroundColor: colors.bgCard,
-    marginBottom: 10,
+    marginBottom: 14,
   },
   mediaWrap: {
     position: 'relative',
     width: '100%',
-    aspectRatio: 1,
+    aspectRatio: 1.12,
     backgroundColor: colors.bgElevated,
+    overflow: 'hidden',
   },
   media: {
     width: '100%',
     height: '100%',
+  },
+  shade: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '34%',
+    backgroundColor: 'rgba(7,6,5,0.25)',
   },
   fallback: {
     alignItems: 'center',
@@ -120,43 +145,72 @@ const styles = StyleSheet.create({
   },
   corner: {
     position: 'absolute',
-    top: 6,
-    right: 6,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: 'rgba(44,33,24,0.72)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(18,14,11,0.82)',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
   },
   cornerText: {
-    color: colors.accent,
-    fontSize: 11,
-  },
-  playBadge: {
-    position: 'absolute',
-    left: 6,
-    bottom: 6,
-    backgroundColor: 'rgba(44,33,24,0.75)',
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  playText: {
     fontFamily: fonts.bodyBold,
+    color: colors.accent,
+    fontSize: 8,
+    letterSpacing: 1,
+  },
+  mediaLabel: {
+    position: 'absolute',
+    left: 9,
+    bottom: 9,
+    backgroundColor: 'rgba(7,6,5,0.76)',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 999,
+  },
+  mediaLabelText: {
+    fontFamily: fonts.bodyMedium,
     color: '#FFF9F2',
     fontSize: 9,
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
   meta: {
-    paddingHorizontal: 8,
-    paddingVertical: 7,
-    minHeight: 42,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    minHeight: 124,
+    gap: 7,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
   },
   title: {
-    fontFamily: fonts.bodyMedium,
+    flex: 1,
+    fontFamily: fonts.display,
     color: colors.text,
+    fontSize: 16,
+    lineHeight: 20,
+  },
+  arrow: {
+    fontFamily: fonts.bodyBold,
+    color: colors.accent,
+    fontSize: 14,
+  },
+  description: {
+    fontFamily: fonts.body,
+    color: colors.textMuted,
     fontSize: 11,
-    lineHeight: 14,
+    lineHeight: 16,
+  },
+  caseLink: {
+    marginTop: 2,
+    fontFamily: fonts.bodyBold,
+    color: colors.accent,
+    fontSize: 10,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
 });
